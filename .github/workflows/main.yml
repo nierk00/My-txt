@@ -1,0 +1,21 @@
+name: Run Python Every Day ☀️
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 9AM 한국시간 = 0AM UTC
+  workflow_dispatch:  # 수동 실행도 가능하게 함
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 내 저장소 가져오기
+        uses: actions/checkout@v2
+
+      - name: 파이썬 설치하기
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Python 코드 실행하기
+        run: python main.py
