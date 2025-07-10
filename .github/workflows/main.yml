@@ -1,21 +1,29 @@
-name: Run Python Every Day ☀️
+name: 📡 News Summary Bot
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 매일 9AM 한국시간 = 0AM UTC
-  workflow_dispatch:  # 수동 실행도 가능하게 함
+    - cron: '0 0 * * *'  # 매일 9AM KST (한국 시간 기준) → UTC 0시
+  workflow_dispatch:  # 수동 실행도 가능하게
 
 jobs:
-  run-python:
+  news-summary:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 내 저장소 가져오기
-        uses: actions/checkout@v2
+    - name: 코드 가져오기
+      uses: actions/checkout@v3
 
-      - name: 파이썬 설치하기
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
+    - name: Python 설치
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Python 코드 실행하기
-        run: python main.py
+    - name: 필요 라이브러리 설치
+      run: |
+        python -m pip install --upgrade pip
+        pip install feedparser openai
+
+    - name: 뉴스 요약 실행
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: python main.py
